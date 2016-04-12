@@ -40,10 +40,10 @@ public class MyRecommender {
 		}
 	}
 	
-	public List<RecommendedItem> getRecommendations(){
+	public List<RecommendedItem> getRecommendations(int userId){
 		List<RecommendedItem> recommendations = null;
 		try {
-			recommendations = this.recommender.recommend(666, 10);
+			recommendations = this.recommender.recommend(userId, 10);
 		} catch (TasteException e) {
 			System.out.println("TasteException occured: ");
 			e.printStackTrace();
@@ -56,8 +56,9 @@ public class MyRecommender {
 	}
 	
 	public static void main(String[] args){
+		int userId = 666;
 		MyRecommender mr = new MyRecommender("/home/cloudera/Downloads/hw5/recommender/ml-100k/output.csv");
-		List<RecommendedItem> recommendations = mr.getRecommendations();
+		List<RecommendedItem> recommendations = mr.getRecommendations(userId);
 		
 		System.out.println("Recommended items: ");
 		for (RecommendedItem recommendation:recommendations){
