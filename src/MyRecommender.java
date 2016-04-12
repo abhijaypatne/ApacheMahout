@@ -25,7 +25,7 @@ public class MyRecommender {
 		try{
 			model = new FileDataModel(new File(filePath));
 			similarity = new PearsonCorrelationSimilarity(model);
-			neighborhood = new ThresholdUserNeighborhood(0.1, similarity, model);
+			neighborhood = new ThresholdUserNeighborhood(0.01, similarity, model);
 			recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
 		}
 		catch(IOException io){
@@ -40,11 +40,10 @@ public class MyRecommender {
 		}
 	}
 	
-	public static void main(String[] args){
-		MyRecommender mr = new MyRecommender("/home/cloudera/Downloads/hw5/recommender/ml-100k/output.csv");
+	public List<RecommendedItem> getRecommendations(){
 		List<RecommendedItem> recommendations = null;
 		try {
-			recommendations = mr.recommender.recommend(666, 10);
+			recommendations = this.recommender.recommend(666, 10);
 		} catch (TasteException e) {
 			System.out.println("TasteException occured: ");
 			e.printStackTrace();
@@ -53,8 +52,16 @@ public class MyRecommender {
 			e.printStackTrace();			
 		}
 		
+		return recommendations;
+	}
+	
+	public static void main(String[] args){
+		MyRecommender mr = new MyRecommender("/home/cloudera/Downloads/hw5/recommender/ml-100k/output.csv");
+		List<RecommendedItem> recommendations = mr.getRecommendations();
+		
+		System.out.println("Recommended items: ");
 		for (RecommendedItem recommendation:recommendations){
-			System.out.println(recommendation);
+			System.out.println(recommendation.getItemID());
 		}
 	}
 
